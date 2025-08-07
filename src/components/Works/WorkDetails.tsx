@@ -27,7 +27,7 @@ import {
   ArrowRight,
   ExternalLink
 } from 'lucide-react';
-import { projects } from '../../data/projects';
+import { useProjects } from '../../hooks/useProjects';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,6 +44,7 @@ interface ProjectSection {
 export default function WorkDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { projects, loading, error } = useProjects();
   const project = projects.find(p => p.id === id);
   
   // State management

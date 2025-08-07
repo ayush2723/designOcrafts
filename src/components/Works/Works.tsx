@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Loader2, Search, Filter, Grid3X3, List, Eye, Calendar, Palette, ArrowRight, Play, Sparkles, Building2, Lightbulb, Award } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
-import { projects } from '../../data/projects';
+import { useProjects } from '../../hooks/useProjects';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -276,7 +276,9 @@ export default function Works() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [filteredProjects, setFilteredProjects] = useState(projects);
+  const [filteredProjects, setFilteredProjects] = useState<any[]>([]);
+  
+  const { projects, loading: projectsLoading, error } = useProjects();
   
   const headerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -285,11 +287,11 @@ export default function Works() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setIsLoading(projectsLoading);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [projectsLoading]);
 
   useEffect(() => {
   let filtered = projects;
